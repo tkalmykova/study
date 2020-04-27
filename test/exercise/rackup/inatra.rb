@@ -13,8 +13,16 @@ module Inatra
     private
 
     def get(path, &block)
-      @@handlers['get'] ||= {}
-      @@handlers['get'][path] = -> { block.call }
+      add_handler('get', path, &block)
+    end
+
+    def post(path, &block)
+      add_handler('post', path, &block)
+    end
+
+    def add_handler(verb, path)
+      @@handlers[verb] ||= {}
+      @@handlers[verb][path] = -> { yield }
     end
 
     def handle_request(method, path)
