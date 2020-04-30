@@ -12,24 +12,16 @@ module Inatra
 
     private
 
-    def get(path, &block)
-      add_handler('get', path, &block)
-    end
-
-    def post(path, &block)
-      add_handler('post', path, &block)
-    end
-
-    def add_handler(verb, path, &block)
-      @handlers[verb] ||= {}
-      @handlers[verb][path] = block
+    def method_missing(method_name, path, &block)
+      @handlers[method_name] ||= {}
+      @handlers[method_name][path] = block
     end
 
     def handle_request(method, path)
-      handler = @handlers.dig(method.downcase, path)
-      return handler.call if handler
+      handler = @handlers.dig(method.downcase.to_sym, path)
+      return [404, {}, ['Not Found']] unless handler
 
-      [404, {}, ['Not Found']]
+      handler.call
     end
   end
 end
