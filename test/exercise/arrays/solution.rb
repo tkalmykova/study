@@ -4,7 +4,7 @@ module Exercise
       def replace(array)
         biggest_element = max_element(array)
         array.map do |element|
-          element > 0 ? biggest_element : element
+          element.positive? ? biggest_element : element
         end
       end
 
@@ -17,6 +17,7 @@ module Exercise
       def binary_search(array, query, start_index, end_index)
         if start_index == end_index
           return start_index if array[start_index] == query
+
           return -1
         end
 

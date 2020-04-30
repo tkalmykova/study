@@ -39,12 +39,12 @@ module Exercise
         acc
       end
 
-      def iterate(i, &block)
-        return if i == size
+      def iterate(index, &block)
+        return if index == size
 
-        yield(self[i])
+        yield(self[index])
 
-        iterate(i + 1, &block)
+        iterate(index + 1, &block)
       end
     end
   end
