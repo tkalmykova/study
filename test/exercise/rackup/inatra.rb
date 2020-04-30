@@ -1,5 +1,5 @@
 module Inatra
-  @@handlers = {}
+  @handlers = {}
 
   class << self
     def routes(&block)
@@ -20,14 +20,16 @@ module Inatra
       add_handler('post', path, &block)
     end
 
-    def add_handler(verb, path)
-      @@handlers[verb] ||= {}
-      @@handlers[verb][path] = -> { yield }
+    def add_handler(verb, path, &block)
+      @handlers[verb] ||= {}
+      @handlers[verb][path] = block
     end
 
     def handle_request(method, path)
-      handler = @@handlers.dig(method.downcase, path)
-      handler.call if handler
+      handler = @handlers.dig(method.downcase, path)
+      return handler.call if handler
+
+      [404, {}, ['Not Found']]
     end
   end
 end
